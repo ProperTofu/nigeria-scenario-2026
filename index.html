@@ -1272,7 +1272,7 @@ function updateOutputs() {
 
   const h2Rev   = s.h2Avg       * 1e6 * 180 * bl / 1e9;
   const prodGap = (1.84 - s.fullYearAvg) * 1e6;
-  const shortfall = (1.84 - s.fullYearAvg) * 365 * bl / 1e9;
+  const shortfall = (1.84 - s.fullYearAvg) * 1e6 * 365 * bl / 1e9;
 
   document.getElementById('outAvg').textContent      = s.fullYearAvg.toFixed(3);
   document.getElementById('outRevenue').textContent  = '$' + f1(h2Rev);
