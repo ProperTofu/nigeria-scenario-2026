@@ -210,8 +210,8 @@
       margin-bottom: 36px;
     }
     .stat-card {
-      background: rgba(255,255,255,0.065);
-      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: var(--radius);
       padding: 20px;
     }
@@ -219,7 +219,8 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.09em;
-      color: rgba(255,255,255,0.48);
+      color: rgba(255,255,255,0.75);
+      font-weight: 700;
       margin-bottom: 8px;
     }
     .stat-value {
@@ -229,7 +230,7 @@
       line-height: 1;
       margin-bottom: 5px;
     }
-    .stat-unit { font-size: 11px; color: rgba(255,255,255,0.38); }
+    .stat-unit { font-size: 11px; color: rgba(255,255,255,0.60); font-weight: 500; }
     .stat-card.opec  .stat-value { color: var(--gold-light); }
     .stat-card.bench .stat-value { color: rgba(255,255,255,0.45); }
     .disclaimer-badge {
@@ -493,6 +494,36 @@
     .small-print strong { color: var(--text); }
 
     /* ══════════════════════════════
+       EXPLORER TWO-COLUMN
+    ══════════════════════════════ */
+    .explorer-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 28px;
+    }
+    .explorer-layout > .explorer-panel { margin-bottom: 0; }
+    .explorer-results {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .explorer-layout .output-cards {
+      grid-template-columns: repeat(2, 1fr);
+      margin-bottom: 0;
+    }
+    .explorer-layout .summary-note { margin-bottom: 0; }
+    .chart-scroll-hint {
+      display: none;
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ══════════════════════════════
        7. SENSITIVITY TABLE
     ══════════════════════════════ */
     .table-scroll {
@@ -610,6 +641,7 @@
       .section { padding: 60px 0; }
       .explorer-panel { padding: 28px; }
       thead th, tbody td { padding: 11px 14px; }
+      .explorer-layout { grid-template-columns: 1fr; }
     }
 
     /* ══════════════════════════════
@@ -640,6 +672,12 @@
       /* Cards */
       .scenario-cards-grid { grid-template-columns: 1fr; }
 
+      /* Chart */
+      .chart-section { padding: 40px 0; }
+      .chart-wrapper { padding: 16px 10px 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      #chartContainer { min-width: 520px; }
+      .chart-scroll-hint { display: block; }
+
       /* Explorer */
       .explorer-panel { padding: 20px 16px; }
       .output-cards { grid-template-columns: repeat(2,1fr); gap: 12px; }
@@ -661,7 +699,7 @@
        RESPONSIVE — VERY SMALL ≤380
     ══════════════════════════════ */
     @media (max-width: 380px) {
-      .output-cards { grid-template-columns: 1fr; }
+      .explorer-layout .output-cards { grid-template-columns: 1fr; }
       .hero-title   { font-size: 26px; }
       .hero-stats   { grid-template-columns: 1fr 1fr; }
     }
@@ -789,8 +827,11 @@
     <p class="section-eyebrow">Production Trajectory</p>
     <h2 class="section-title">2026 Crude Output — Actuals &amp; Scenarios</h2>
     <div class="chart-wrapper">
-      <canvas id="productionChart" aria-label="Nigeria 2026 crude production trajectory" role="img"></canvas>
+      <div id="chartContainer">
+        <canvas id="productionChart" aria-label="Nigeria 2026 crude production trajectory" role="img"></canvas>
+      </div>
     </div>
+    <p class="chart-scroll-hint">← Swipe to see full chart →</p>
   </div>
 </section>
 
@@ -816,60 +857,64 @@
     <p class="section-eyebrow">Interactive Analysis</p>
     <h2 class="section-title">What-If Scenario Explorer</h2>
 
-    <div class="explorer-panel">
-      <p class="panel-title">Configure Assumptions</p>
+    <div class="explorer-layout">
+      <div class="explorer-panel">
+        <p class="panel-title">Configure Assumptions</p>
 
-      <!-- Slider -->
-      <div style="margin-bottom:0">
-        <div class="slider-header">
-          <span class="slider-label">Brent Crude Price</span>
-          <div class="slider-val">$<span id="brentDisplay">76</span><span>/bbl</span></div>
+        <!-- Slider -->
+        <div style="margin-bottom:0">
+          <div class="slider-header">
+            <span class="slider-label">Brent Crude Price</span>
+            <div class="slider-val">$<span id="brentDisplay">76</span><span>/bbl</span></div>
+          </div>
+          <input type="range" id="brentSlider" min="60" max="90" value="76" step="1" aria-label="Brent crude price">
+          <canvas id="rulerCanvas" height="36" aria-hidden="true"></canvas>
         </div>
-        <input type="range" id="brentSlider" min="60" max="90" value="76" step="1" aria-label="Brent crude price">
-        <canvas id="rulerCanvas" height="36" aria-hidden="true"></canvas>
-      </div>
 
-      <!-- Controls row -->
-      <div class="controls-row">
-        <label class="premium-toggle">
-          <input type="checkbox" id="premiumCheck" checked>
-          Include Bonny Light premium (+$1.50/bbl over Brent)
-        </label>
-        <div class="scenario-toggles" role="group" aria-label="Select scenario">
-          <button class="scn-btn" data-s="recovery" aria-pressed="false">Recovery</button>
-          <button class="scn-btn active" data-s="base" aria-pressed="true">Base Case</button>
-          <button class="scn-btn" data-s="disruption" aria-pressed="false">Disruption</button>
+        <!-- Controls row -->
+        <div class="controls-row">
+          <label class="premium-toggle">
+            <input type="checkbox" id="premiumCheck" checked>
+            Include Bonny Light premium (+$1.50/bbl over Brent)
+          </label>
+          <div class="scenario-toggles" role="group" aria-label="Select scenario">
+            <button class="scn-btn" data-s="recovery" aria-pressed="false">Recovery</button>
+            <button class="scn-btn active" data-s="base" aria-pressed="true">Base Case</button>
+            <button class="scn-btn" data-s="disruption" aria-pressed="false">Disruption</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Output cards -->
-    <div class="output-cards">
-      <div class="output-card">
-        <div class="oc-label">Full-Year Crude Avg</div>
-        <div class="oc-value" id="outAvg">1.489</div>
-        <div class="oc-unit">M bopd</div>
-      </div>
-      <div class="output-card">
-        <div class="oc-label">Est. H2 Revenue</div>
-        <div class="oc-value" id="outRevenue">—</div>
-        <div class="oc-unit">$B · H2 180 days</div>
-      </div>
-      <div class="output-card">
-        <div class="oc-label">Production Gap</div>
-        <div class="oc-value" id="outGap">351,000</div>
-        <div class="oc-unit">bopd below 1.84M benchmark</div>
-      </div>
-      <div class="output-card">
-        <div class="oc-label">Budget Rev. Shortfall</div>
-        <div class="oc-value" id="outShortfall">—</div>
-        <div class="oc-unit">$B annualised</div>
-      </div>
-    </div>
+      <div class="explorer-results">
+        <!-- Output cards -->
+        <div class="output-cards">
+          <div class="output-card">
+            <div class="oc-label">Full-Year Crude Avg</div>
+            <div class="oc-value" id="outAvg">1.489</div>
+            <div class="oc-unit">M bopd</div>
+          </div>
+          <div class="output-card">
+            <div class="oc-label">Est. H2 Revenue</div>
+            <div class="oc-value" id="outRevenue">—</div>
+            <div class="oc-unit">$B · H2 180 days</div>
+          </div>
+          <div class="output-card">
+            <div class="oc-label">Production Gap</div>
+            <div class="oc-value" id="outGap">351,000</div>
+            <div class="oc-unit">bopd below 1.84M benchmark</div>
+          </div>
+          <div class="output-card">
+            <div class="oc-label">Budget Rev. Shortfall</div>
+            <div class="oc-value" id="outShortfall">—</div>
+            <div class="oc-unit">$B annualised</div>
+          </div>
+        </div>
 
-    <!-- Summary note -->
-    <div class="summary-note base" id="summaryNote">
-      <p id="summaryText"></p>
+        <!-- Summary note -->
+        <div class="summary-note base" id="summaryNote">
+          <p id="summaryText"></p>
+        </div>
+      </div>
     </div>
 
     <p class="small-print">
@@ -1045,6 +1090,8 @@ const ACTUALS = [1.459,1.314,1.383,1.489,1.530];
 const MONTHS  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const SENS_PRICES = [65,70,75,80,85];
 
+const isMob = () => window.innerWidth < 680;
+
 let curScenario = 'base';
 let curBrent    = 76;
 let premiumOn   = true;
@@ -1073,7 +1120,7 @@ const vertDividerPlugin = {
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.font = '11px Segoe UI, sans-serif';
+    ctx.font = `${isMob() ? '9px' : '11px'} Segoe UI, sans-serif`;
     ctx.fillStyle = 'rgba(255,255,255,0.38)';
     ctx.textAlign = 'right';
     ctx.fillText('◀ Actuals', x - 7, chartArea.top + 16);
@@ -1155,14 +1202,14 @@ const productionChart = new Chart(
     options: {
       responsive: true,
       maintainAspectRatio: true,
-      aspectRatio: window.innerWidth < 680 ? 1.5 : 2.4,
+      aspectRatio: isMob() ? 1.2 : 2.4,
       interaction: { mode:'index', intersect:false },
       plugins: {
         legend: {
           position: 'bottom',
           labels: {
-            usePointStyle: true, padding: 22,
-            font: { size: 12 },
+            usePointStyle: true, padding: isMob() ? 10 : 22,
+            font: { size: isMob() ? 10 : 12 },
             color: 'rgba(255,255,255,0.72)',
             generateLabels(chart) {
               return chart.data.datasets.map((ds,i) => ({
@@ -1195,14 +1242,14 @@ const productionChart = new Chart(
       scales: {
         x: {
           grid: { color:'rgba(255,255,255,0.07)' },
-          ticks: { color:'rgba(255,255,255,0.60)', font:{ size:12 } }
+          ticks: { color:'rgba(255,255,255,0.60)', font:{ size: isMob() ? 10 : 12 } }
         },
         y: {
           min: 1.20, max: 1.80,
           grid: { color:'rgba(255,255,255,0.07)' },
           ticks: {
             color: 'rgba(255,255,255,0.60)',
-            font:  { size:12 },
+            font:  { size: isMob() ? 10 : 12 },
             callback: v => v.toFixed(2) + 'M'
           }
         }
@@ -1376,7 +1423,11 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     drawRuler();
-    productionChart.options.aspectRatio = window.innerWidth < 680 ? 1.5 : 2.4;
+    productionChart.options.aspectRatio = isMob() ? 1.2 : 2.4;
+    productionChart.options.plugins.legend.labels.padding = isMob() ? 10 : 22;
+    productionChart.options.plugins.legend.labels.font.size = isMob() ? 10 : 12;
+    productionChart.options.scales.x.ticks.font.size = isMob() ? 10 : 12;
+    productionChart.options.scales.y.ticks.font.size = isMob() ? 10 : 12;
     productionChart.update();
   }, 80);
 });
