@@ -289,7 +289,18 @@
 
     .sc-title   { font-family: Georgia, serif; font-size: 20px; color: var(--green-deep); margin-bottom: 4px; }
     .sc-value   { font-family: Georgia, serif; font-size: 30px; color: var(--cc); margin-bottom: 3px; }
-    .sc-sub     { font-size: 11px; color: var(--text-muted); margin-bottom: 12px; }
+    .sc-sub     { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+    .sc-h2rev {
+      display: flex; align-items: baseline; gap: 6px;
+      background: var(--bg); border-radius: 4px;
+      padding: 7px 10px; margin-bottom: 10px;
+    }
+    .sc-h2rev-val  { font-family: Georgia, serif; font-size: 16px; color: var(--cc); }
+    .sc-h2rev-unit { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
+    .cards-footnote {
+      font-size: 11px; color: var(--text-muted);
+      line-height: 1.75; margin-top: 14px;
+    }
     .prob-badge {
       display: inline-block;
       background: rgba(0,61,34,0.07); color: var(--green-deep);
@@ -830,6 +841,10 @@
         <h3 class="sc-title">Recovery</h3>
         <div class="sc-value">1.555M</div>
         <div class="sc-sub">bopd full-year average</div>
+        <div class="sc-h2rev">
+          <span class="sc-h2rev-val">$18–27B</span>
+          <span class="sc-h2rev-unit">est. H2 revenue</span>
+        </div>
         <div class="prob-badge">25% probability</div>
         <p class="sc-desc">Security improvements and PIA investment gains drive renewed output. NNPC ramps allocation toward OPEC target level by Q4.</p>
         <span class="sc-hint" aria-hidden="true">Click to explore →</span>
@@ -840,6 +855,10 @@
         <h3 class="sc-title">Base Case</h3>
         <div class="sc-value">1.489M</div>
         <div class="sc-sub">bopd full-year average</div>
+        <div class="sc-h2rev">
+          <span class="sc-h2rev-val">$17–25B</span>
+          <span class="sc-h2rev-unit">est. H2 revenue</span>
+        </div>
         <div class="prob-badge">40% probability</div>
         <p class="sc-desc">Broadly stable production with minor field maintenance fluctuations. No significant positive or negative shocks materialise.</p>
         <span class="sc-hint" aria-hidden="true">Selected ✓</span>
@@ -850,12 +869,17 @@
         <h3 class="sc-title">Disruption</h3>
         <div class="sc-value">1.393M</div>
         <div class="sc-sub">bopd full-year average</div>
+        <div class="sc-h2rev">
+          <span class="sc-h2rev-val">$15–22B</span>
+          <span class="sc-h2rev-unit">est. H2 revenue</span>
+        </div>
         <div class="prob-badge">35% probability</div>
         <p class="sc-desc">Renewed Delta security incidents and pre-election uncertainty create sustained production headwinds through H2.</p>
         <span class="sc-hint" aria-hidden="true">Click to explore →</span>
       </div>
 
     </div>
+    <p class="cards-footnote">H2 estimate at $60–90/bbl Brent range. Bonny Light premium of $1.50/bbl applied. H2 = 180 days, crude only excluding condensate.</p>
   </div>
 </section>
 
