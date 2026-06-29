@@ -1497,13 +1497,13 @@ function buildSensTable() {
     if (budgetRow) {
       trCls = 'budget-row';
       tags += '<span class="row-tag budget-tag">Budget assumption</span>';
-      if (isCurrent) tags += '<span class="row-tag current-tag">← current</span>';
+      if (isCurrent) tags += '<span class="row-tag current-tag">← selected</span>';
     } else if (spotRow) {
       trCls = isCurrent ? 'spot-row spot-active' : 'spot-row';
       tags += '<span class="row-tag spot-tag">Current spot</span>';
     } else if (isCurrent) {
       trCls = 'hl-row';
-      tags += '<span class="row-tag current-tag">← current</span>';
+      tags += '<span class="row-tag current-tag">← selected</span>';
     }
 
     if (trCls) tr.className = trCls;
