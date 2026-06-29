@@ -550,10 +550,49 @@
     tbody td:first-child { text-align: left; font-weight: 500; }
     tbody tr:nth-child(even) { background: #f8fbf9; }
     tbody tr.hl-row { background: rgba(200,146,10,0.09) !important; }
-    tbody tr.hl-row td:first-child::after {
-      content: ' ← current';
-      font-size: 10px; color: var(--gold);
-      font-weight: 700; font-style: italic;
+
+    /* Sensitivity special rows */
+    tbody tr.budget-row { background: #E8F0FD !important; }
+    tbody tr.budget-row td { font-weight: 700; color: #1a3a6a; }
+    tbody tr.spot-row { background: rgba(245,183,48,0.12) !important; }
+    tbody tr.spot-row td { font-weight: 700; }
+    .row-tag { font-size: 10px; font-weight: 700; font-style: italic; margin-left: 4px; }
+    .budget-tag { color: #1a5ab5; }
+    .spot-tag   { color: var(--gold); }
+    .current-tag { color: var(--gold); }
+
+    /* Info icon */
+    .info-icon {
+      font-size: 12px; cursor: help;
+      color: var(--text-muted); vertical-align: middle;
+      margin-left: 3px; opacity: 0.7;
+    }
+    .info-icon:hover { opacity: 1; }
+
+    /* Budget scenario table */
+    .budget-table thead th { background: #1a3a6a; }
+    .budget-table tbody tr.recovery-row   { background: rgba(0,168,98,0.07) !important; }
+    .budget-table tbody tr.base-row       { background: rgba(200,146,10,0.07) !important; }
+    .budget-table tbody tr.disruption-row { background: rgba(231,76,60,0.07) !important; }
+    .breakeven-recovery   { color: var(--green-light); font-weight: 700; }
+    .breakeven-base       { color: var(--gold);        font-weight: 700; }
+    .breakeven-disruption { color: var(--red-light);   font-weight: 700; }
+    .table-footnote {
+      font-size: 11px; color: var(--text-muted);
+      line-height: 1.75; margin-top: 14px;
+    }
+    .table-footnote strong { color: var(--text); }
+    .budget-analysis-intro {
+      font-size: 15px; color: var(--text);
+      line-height: 1.75; margin-bottom: 32px; max-width: 820px;
+    }
+    .budget-analysis-outro {
+      font-size: 14px; color: var(--text);
+      line-height: 1.8; margin-top: 24px;
+      padding: 20px 24px; background: #fff;
+      border-left: 3px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      box-shadow: var(--shadow);
     }
 
     /* Variance colouring */
@@ -904,9 +943,9 @@
             <div class="oc-unit">bopd below 1.84M benchmark</div>
           </div>
           <div class="output-card">
-            <div class="oc-label">Budget Rev. Shortfall</div>
+            <div class="oc-label">Budget Revenue Shortfall ($B) <span class="info-icon" title="Annualised revenue gap between scenario production at current price vs budget target of $41.3B at $60 Brent.">ⓘ</span></div>
             <div class="oc-value" id="outShortfall">—</div>
-            <div class="oc-unit">$B annualised</div>
+            <div class="oc-unit">cost of production gap at current price</div>
           </div>
         </div>
 
@@ -946,6 +985,60 @@
         <tbody id="sensitivityBody"></tbody>
       </table>
     </div>
+    <p class="table-footnote">$60/bbl row reflects Nigeria's 2026 budget price assumption. $76/bbl row reflects current Brent spot as of June 2026. Bonny Light premium of $1.50/bbl applied throughout. H2 = 180 days. Figures are H2 crude revenue only, excluding condensate.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     7b. BUDGET SCENARIO ANALYSIS
+══════════════════════════════ -->
+<section class="section" style="border-top:1px solid var(--border);">
+  <div class="container">
+    <p class="section-eyebrow">Budget Price Analysis</p>
+    <h2 class="section-title">Budget Scenario Analysis: Production Shortfall vs Price Windfall</h2>
+    <p class="budget-analysis-intro">Nigeria's 2026 budget was built on two assumptions simultaneously: 1.84M bopd production and $60/bbl Brent. The sensitivity table above addresses the price dimension. This section addresses the interaction between the production shortfall and the budget price assumption — and what price Nigeria needs per barrel to compensate for producing fewer barrels than planned.</p>
+    <div class="table-scroll">
+      <table class="budget-table" aria-label="Budget Scenario Analysis">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Production avg</th>
+            <th>Revenue at $60 Brent</th>
+            <th>Revenue at $76 Brent</th>
+            <th>Budget target</th>
+            <th>Breakeven Brent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="recovery-row">
+            <td>↑ Recovery</td>
+            <td>1.555M bopd</td>
+            <td>$34.9B <span class="neut">(below target)</span></td>
+            <td>$44.0B <span class="pos">(above target)</span></td>
+            <td>$41.3B</td>
+            <td class="breakeven-recovery">$71.3/bbl</td>
+          </tr>
+          <tr class="base-row">
+            <td>→ Base Case</td>
+            <td>1.489M bopd</td>
+            <td>$33.4B <span class="neut">(below target)</span></td>
+            <td>$42.1B <span class="pos">(above target)</span></td>
+            <td>$41.3B</td>
+            <td class="breakeven-base">$74.5/bbl</td>
+          </tr>
+          <tr class="disruption-row">
+            <td>↓ Disruption</td>
+            <td>1.393M bopd</td>
+            <td>$31.3B <span class="neut">(below target)</span></td>
+            <td>$39.4B <span class="neut">(still below)</span></td>
+            <td>$41.3B</td>
+            <td class="breakeven-disruption">$79.7/bbl</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-footnote"><strong>Budget target:</strong> $41.3B annualised (1.84M bopd × $61.50 Bonny Light × 365 days). <strong>Breakeven Brent price:</strong> the oil price at which each scenario's production volume generates exactly the revenue the budget assumed. Revenue figures are annualised gross crude revenue; pipeline tariffs, cost oil recovery, and profit-oil splits are not modelled. The breakeven covers the fiscal revenue target only, not the production benchmark of 1.84M bopd, which remains unmet under all scenarios regardless of price.</p>
+    <div class="budget-analysis-outro">The breakeven price answers one question: given Nigeria will produce fewer barrels than the budget assumed, how high does the price per barrel need to be to earn the same total revenue? Recovery needs only $71.3/bbl because it produces more barrels. Base Case needs $74.5/bbl — at current Brent of $76, it sits just above budget revenue by approximately $0.8B, a fragile margin. Disruption needs $79.7/bbl and remains below budget revenue at today's prices. Nigeria is simultaneously running a production deficit and benefiting from a price windfall. Whether the net fiscal position is positive or negative depends entirely on where Brent settles for the rest of H2 2026.</div>
   </div>
 </section>
 
@@ -1088,7 +1181,6 @@ const SCENARIOS = {
 };
 const ACTUALS = [1.459,1.314,1.383,1.489,1.530];
 const MONTHS  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const SENS_PRICES = [65,70,75,80,85];
 
 const isMob = () => window.innerWidth < 680;
 
@@ -1146,6 +1238,16 @@ const productionChart = new Chart(
           borderWidth: 1.5,
           pointRadius: 0,
           fill: false, tension: 0, order: 6
+        },
+        /* Budget benchmark */
+        {
+          label: 'Budget benchmark (1.84M)',
+          data: Array(12).fill(1.84),
+          borderColor: 'rgba(255,255,255,0.4)',
+          borderDash: [5,5],
+          borderWidth: 1.5,
+          pointRadius: 0,
+          fill: false, tension: 0, order: 7
         },
         /* Actuals */
         {
@@ -1245,7 +1347,7 @@ const productionChart = new Chart(
           ticks: { color:'rgba(255,255,255,0.60)', font:{ size: isMob() ? 10 : 12 } }
         },
         y: {
-          min: 1.20, max: 1.80,
+          min: 1.20, max: 1.90,
           grid: { color:'rgba(255,255,255,0.07)' },
           ticks: {
             color: 'rgba(255,255,255,0.60)',
@@ -1330,19 +1432,19 @@ function updateNote(s, h2Rev, shortfall, bl) {
   const note = document.getElementById('summaryNote');
   const txt  = document.getElementById('summaryText');
   note.className = 'summary-note ' + curScenario;
-  const blStr  = '$' + bl.toFixed(2);
-  const revStr = '$' + f1(h2Rev) + 'B';
-  const gapStr = '$' + f1(shortfall) + 'B';
 
   if (curScenario === 'recovery') {
     txt.textContent =
-      `Under the Recovery scenario, enhanced security operations in the Niger Delta and PIA-driven investment mobilisation are rebuilding crude supply, with NNPC allocation trending toward OPEC compliance by Q4 2026. At ${blStr}/bbl Bonny Light, estimated H2 crude export revenue reaches ${revStr}. Despite the stronger trajectory, the structural gap versus the 1.84M bopd budget benchmark persists — at current pricing, the annualised revenue shortfall stands at ${gapStr}.`;
+      `Security holds, PIA brownfield gains land, NNPC crude supply to Dangote improves. At $${curBrent}/bbl Brent, H2 revenue of $${f1(h2Rev)}B reflects the strongest production trajectory since 2021. At $71.3 breakeven, the Recovery scenario is above budget revenue at current prices — but the 1.84M bopd production benchmark remains unmet regardless of price.`;
   } else if (curScenario === 'base') {
     txt.textContent =
-      `The Base Case assumes broadly stable production conditions through H2, with incremental maintenance losses broadly offsetting any minor field ramp-ups. At ${blStr}/bbl Bonny Light, estimated H2 crude export revenue is ${revStr}. Even under this stable-output path, the annualised budget revenue shortfall against the 1.84M bopd FGN benchmark stands at ${gapStr} — a structural fiscal gap that persists regardless of moderate price movements.`;
+      `Production holds near the May level — no major disruption, no meaningful acceleration. At $${curBrent}/bbl Brent, H2 revenue of $${f1(h2Rev)}B. The Base Case breakeven is $74.5/bbl — at current $76 Brent, budget revenue is just covered by a margin of ~$0.8B. A small price decline eliminates this surplus entirely.`;
   } else {
+    const combinedShock = curBrent <= 68
+      ? ` At $${curBrent}/bbl, a price shock compounds the volume shock — this is the tail risk.`
+      : '';
     txt.textContent =
-      `The Disruption scenario reflects renewed security incidents in the Delta and pre-2027 election-year uncertainty dampening investment and NNPC operational tempo. At ${blStr}/bbl Bonny Light, H2 crude export revenue falls to ${revStr}. If Brent also retreats below $70, the combined output-price shock raises significant tail risk; the NSIA stabilisation fund may need to offset the gap, with the annualised budget revenue shortfall reaching ${gapStr}.`;
+      `A mid-year security or election-cycle shock drives output to a trough of ~1.29M bopd before a slow recovery.${combinedShock} H2 revenue of $${f1(h2Rev)}B. The Disruption breakeven is $79.7/bbl — above current Brent, meaning the Disruption scenario remains in a budget revenue deficit even at today's prices.`;
   }
 }
 
@@ -1350,17 +1452,44 @@ function buildSensTable() {
   const body = document.getElementById('sensitivityBody');
   body.innerHTML = '';
 
-  const closest = SENS_PRICES.reduce((best, p, i) =>
-    Math.abs(p - curBrent) < Math.abs(SENS_PRICES[best] - curBrent) ? i : best, 0);
+  const ROWS = [
+    { price: 60, budgetRow: true },
+    { price: 65 },
+    { price: 70 },
+    { price: 75 },
+    { price: 76, spotRow: true },
+    { price: 80 },
+    { price: 85 }
+  ];
 
-  SENS_PRICES.forEach((price, i) => {
+  const closestPrice = ROWS.map(r => r.price).reduce((best, p) =>
+    Math.abs(p - curBrent) < Math.abs(best - curBrent) ? p : best
+  );
+
+  ROWS.forEach(({ price, budgetRow, spotRow }) => {
     const bl  = price + (premiumOn ? 1.5 : 0);
     const rec = SCENARIOS.recovery.h2Avg   * 1e6 * 180 * bl / 1e9;
     const bas = SCENARIOS.base.h2Avg       * 1e6 * 180 * bl / 1e9;
     const dis = SCENARIOS.disruption.h2Avg * 1e6 * 180 * bl / 1e9;
-    const tr  = document.createElement('tr');
-    if (i === closest) tr.classList.add('hl-row');
-    tr.innerHTML = `<td>$${price}/bbl</td><td>$${f1(rec)}B</td><td>$${f1(bas)}B</td><td>$${f1(dis)}B</td>`;
+    const isCurrent = price === closestPrice;
+
+    const tr = document.createElement('tr');
+    let trCls = '';
+    let tags  = '';
+
+    if (budgetRow) {
+      trCls = 'budget-row';
+      tags += '<span class="row-tag budget-tag">Budget assumption</span>';
+    } else if (spotRow) {
+      trCls = 'spot-row';
+      tags += '<span class="row-tag spot-tag">Current spot</span>';
+    } else if (isCurrent) {
+      trCls = 'hl-row';
+    }
+    if (isCurrent) tags += '<span class="row-tag current-tag">← current</span>';
+
+    if (trCls) tr.className = trCls;
+    tr.innerHTML = `<td>$${price}/bbl${tags}</td><td>$${f1(rec)}B</td><td>$${f1(bas)}B</td><td>$${f1(dis)}B</td>`;
     body.appendChild(tr);
   });
 }
