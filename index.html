@@ -556,6 +556,7 @@
     tbody tr.budget-row td { font-weight: 700; color: #1a3a6a; }
     tbody tr.spot-row { background: rgba(245,183,48,0.12) !important; }
     tbody tr.spot-row td { font-weight: 700; }
+    tbody tr.spot-row.spot-active { background: rgba(245,183,48,0.26) !important; box-shadow: inset 3px 0 0 var(--gold); }
     .row-tag { font-size: 10px; font-weight: 700; font-style: italic; margin-left: 4px; }
     .budget-tag { color: #1a5ab5; }
     .spot-tag   { color: var(--gold); }
@@ -1197,6 +1198,22 @@ function scnLine(key) {
 }
 const actualsData = [...ACTUALS, null,null,null,null,null,null,null];
 
+const lineLabelPlugin = {
+  id: 'lineLabel',
+  afterDraw(chart) {
+    const {ctx, chartArea, scales} = chart;
+    if (!scales.y) return;
+    const y = scales.y.getPixelForValue(1.84);
+    if (y < chartArea.top || y > chartArea.bottom) return;
+    ctx.save();
+    ctx.font = `${isMob() ? '9px' : '10px'} Segoe UI, sans-serif`;
+    ctx.fillStyle = 'rgba(255,255,255,0.52)';
+    ctx.textAlign = 'right';
+    ctx.fillText('Budget target', chartArea.right - 6, y - 5);
+    ctx.restore();
+  }
+};
+
 const vertDividerPlugin = {
   id: 'vertDivider',
   afterDraw(chart) {
@@ -1357,7 +1374,7 @@ const productionChart = new Chart(
         }
       }
     },
-    plugins: [vertDividerPlugin]
+    plugins: [lineLabelPlugin, vertDividerPlugin]
   }
 );
 
@@ -1480,13 +1497,14 @@ function buildSensTable() {
     if (budgetRow) {
       trCls = 'budget-row';
       tags += '<span class="row-tag budget-tag">Budget assumption</span>';
+      if (isCurrent) tags += '<span class="row-tag current-tag">← current</span>';
     } else if (spotRow) {
-      trCls = 'spot-row';
+      trCls = isCurrent ? 'spot-row spot-active' : 'spot-row';
       tags += '<span class="row-tag spot-tag">Current spot</span>';
     } else if (isCurrent) {
       trCls = 'hl-row';
+      tags += '<span class="row-tag current-tag">← current</span>';
     }
-    if (isCurrent) tags += '<span class="row-tag current-tag">← current</span>';
 
     if (trCls) tr.className = trCls;
     tr.innerHTML = `<td>$${price}/bbl${tags}</td><td>$${f1(rec)}B</td><td>$${f1(bas)}B</td><td>$${f1(dis)}B</td>`;
